@@ -48,3 +48,4 @@ extraer_idiomas_otra_forma = parser.find_class("central-featured-lang") #find_cl
 
 for idiomas in extraer_idiomas_otra_forma:
     print(idiomas.text_content())
+    
