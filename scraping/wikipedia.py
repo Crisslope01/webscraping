@@ -1,4 +1,5 @@
 import requests
+from lxml import html
 
 #OBJETIVOS: 
     #- Extraer los idiomas de la pagina principal de WIKIPEDIA
@@ -23,6 +24,6 @@ url= "https://www.wikipedia.org/"
 
 respuesta = requests.get(url, headers=encabezados)
 
-print(respuesta.text)
+print(respuesta) 
 
 
