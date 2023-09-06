@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 #Extraer el titulo y los resumenes de las noticias colgadas en la seccion de deportes del diario el universoseccion deportes
 
 class Noticia(Item):
-    id = Field()
+    
     titular = Field()
     descripcion = Field()
     
@@ -27,19 +27,21 @@ class ElUniversoSpider(Spider):
     start_urls = ["https://www.eluniverso.com/deportes/"]
     
     def parse(self, response):
+        soup = BeautifulSoup(response.body)
         
-        sel: Selector = Selector(response)
-        
-        noticias = sel.xpath('//div[@class="content-feed | space-y-2  "]/ul//li')
-        
-        i=0
-        for noticia in noticias:
-            item = ItemLoader(Noticia(), noticia)
-            item.add_xpath('titular', './/div[@class="card | card-sm story flex flex-row space-x-2 items-center   py-2  w-full   "]//div[@class= "card-content | space-y-1 "]/h2/span/a/text()')  
-            item.add_xpath('descripcion', './/div[@class="card | card-sm story flex flex-row space-x-2 items-center   py-2  w-full   "]//div[@class= "card-content | space-y-1 "]/p/text()')
-            item.add_value('id', i)
-            i+=1
+        contenedor_noticias = soup.find_all('li', class_='relative ',recursive= True) #aca esta el error
+        for noticia in contenedor_noticias:
+            item = ItemLoader(Noticia(), response.body)
+            titular = noticia.find('span', class_= 'relative').text
+            descripcion = noticia.find('p', class_='summary | text-sm m-0 font-secondary').text
+            item.add_value('titular', titular )
+            item.add_value('descripcion', descripcion )
+            
             yield item.load_item()
+            
+            
+# EJECUCION EN TERMINAL:
+# scrapy runspider eluniversobs4.py -o eluniversofinalbs4.csv -t csv   
             
     
 # EJECUCION EN TERMINAL:
