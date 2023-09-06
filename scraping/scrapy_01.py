@@ -11,7 +11,7 @@ from scrapy.loader import ItemLoader
 
 class Pregunta(Item):
     id = Field()
-    #pregunta = Field()
+    pregunta = Field()
     descripcion = Field()
     
 class StackOverflowSpider(Spider):
@@ -32,7 +32,7 @@ class StackOverflowSpider(Spider):
         i=0
         for pregunta in preguntas:
             item = ItemLoader(Pregunta(), pregunta)
-            #item.add_xpath('pregunta', './/div[@class= "s-post-summary--content"]//h3/a/text()') 
+            item.add_xpath('pregunta', './/div[@class= "s-post-summary--content"]//h3/a/text()') 
             item.add_xpath('descripcion', './/div[@class="s-post-summary--content-excerpt"]/text()')
             item.add_value('id', i)
             i+=1
